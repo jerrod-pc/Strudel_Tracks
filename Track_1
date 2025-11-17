@@ -1,0 +1,110 @@
+//addVoicings('test',{'^7':['3M'],'m7':['3m']},['c3','c6'])
+
+
+// set bpm
+ $: setcpm(90/4)
+// bass drum
+let bdDrum = s("9000_bd!4")
+   .gain(0.1)//.beat("0,1,2?,3",8).fast(2)
+// snare drum
+let sdDrum = s("9000_sd")
+   .beat("1,3",4)
+   .gain(0.1)
+// high hat
+let hhDrum = s("9000_hh:4")
+   .beat("0,1?,2?,3,4?,5,6?,7?,8,9?,10,11,12?,13?,14?,15",16)
+   .gain(0.03)
+// shaker
+let shDrum = s("rolandtr808_sh")
+   .beat("0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",16)
+   .gain(0.03)
+
+//chords
+let chordsA = chord("<C^7 A7#11 Dm7 G7>/1","test")
+  .sound("gm_voice_oohs")
+  .voicing()
+  .orbit(2)
+  .delaysync(4/16)
+  .room(2).gain(0.075)
+  .beat("0 2 3?",4)
+  .color('white')
+
+let chordsB = chord("<E7 Eb7#11 D7 G7b9>/1","test")
+  .sound("gm_voice_oohs")
+  .voicing()
+  .orbit(2)
+  .delaysync(4/16)
+  .room(2).gain(0.075)
+  .beat("0 2 3?",4)
+  .color('white')
+
+//bass
+let bassA = note(`
+  c2@2 c2@2 c2@2 c2@2 a2@2 a2@2 g#2@2 g2@2 
+  a2@2 a2@2 e2@2 e2@2 c#2@2 c#2@2 e2@2 c#2@2 
+  d2@2 d2@2 a2@2 c#2@2 d2@2 e2@2 f2@2 f#2@2 
+  g2@2 g2@2 d2@2 d2@2 b2@2 b2@2 g2@2 d2@2`)
+  .slow(4)
+  .gain("0.2")
+  .color('red')
+
+let bassB = note(`
+  e2@2 e2@2 e2@2 e2@2 e2@2 e2@2 e2@2 e2@2 
+  eb2@2 eb2@2 eb2@2 eb2@2 eb2@2 eb2@2 eb2@2 eb2@2 
+  d2@2 d2@2 d2@2 d2@2 d2@2 d2@2 f2@2 f#2@2 
+  g2@2 g2@2 d2@2 d2@2 b2@2 b2@2 g2@2 d2@2`)
+  .slow(4)
+  .gain("0.2")
+  .color("red")
+
+let leadA =  note(`
+  e4@2 d4@2 d4@2 e4@2 c4@2 c4@2 c4@2 c4@2 
+  c#4@2 c#4@2 c#4@2 e4@2 g4@2 g4@2 g4@2 e4@2
+  f4@2 e4@2 d4@2 c4@2 c4@2 f4@2 c4@2 a3@2
+  b3@2 d4@2 f4@2 a4@2 g4@2 f4@2 d4@2 d#4@2`)
+  .slow(4)
+  .sound("gm_ocarina")
+  .gain("0.2")
+  .color("blue")
+
+let leadB =  note(`
+  e4@2 g#4@2 g#4@2 e4@2 g#4@2 g#4@2 e4@2 a4@2 
+  a4@2 g4@2 a4@2 a4@2 g4@2 a4@2 a4@2 f4@2
+  d4@2 e4@2 f#4@2 d4@2 d4@2 f#4@2 g4@2 a4@2
+  g4@2 g4@2 f4@2 f4@2 e4@2 e4@2 d4@2 d#4@2`)
+  .slow(4)
+  .sound("gm_ocarina")
+  .gain("0.2")
+  .color("blue")
+
+
+$: stack(
+  bassA.mask(     "<1 1 0 1>/4"),
+  bassB.mask(     "<0 0 1 0>/4"),
+  chordsA.mask(   "<1 1 0 1>/4"),
+  chordsB.mask(   "<0 0 1 0>/4"),
+  leadA.mask(     "<1 1 0 1>/4"),
+  leadB.mask(     "<0 0 1 0>/4"),
+  bdDrum.mask(    "<1 1 1 1>/4"),
+  sdDrum.mask(    "<1 1 1 1>/4"),
+  hhDrum.mask(    "<1 1 1 1>/4"),
+  shDrum.mask(    "<1 1 1 1>/4"),
+)
+
+all(x=>x
+    // .scope()
+    .pianoroll({
+      playhead: 0.3, 
+      playheadColor: 'white', 
+      //autorange:1,
+      fill: 0,
+      fillActive: 1,
+      stroke: 1,
+      vertical: 1, 
+      flipTime: 1,
+      // minMidi: 0,
+      // maxMidi: 200,
+      cycles: 2,
+      background: 'black',
+    })
+ )
