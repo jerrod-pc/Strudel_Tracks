@@ -1,0 +1,120 @@
+// set bpm
+ $: setcpm(90/4)
+// bass drum
+let bdDrum = s("9000_bd!4")
+  .beat("<[0,3,6,15][0,3?,6,11,12,15]>",16)
+   .gain(0.1)//.beat("0,1,2?,3",8).fast(2)
+// snare drum
+let sdDrum = s("9000_sd")
+   .beat("2",4) 
+   .gain(0.1)
+// high hat
+let hhDrum = s("9000_hh:4")
+   .beat("0,2,4,6,8,10,12,14?,15",16)
+   .gain(0.03)
+// shaker
+let shDrum = s("rolandtr808_sh")
+   .beat("0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15",16)
+   .gain(0.03)
+
+//chords
+let chordsA = chord("<Dm7 Em7 Dm7 A7b9>/1","test")
+  .sound("gm_voice_oohs")
+  .voicing()
+  .orbit(2)
+  .delaysync(4/16)
+  .room(2).gain(0.075)
+  .beat("<[2,6,10,14][2,6,10,14][2,7,10,14][2,6,10,14]>",16)
+  .color('#5BC0BE')
+
+let chordsB = chord("<E7 Eb7#11 D7 G7b9>/1","test")
+  .sound("gm_voice_oohs")
+  .voicing()
+  .orbit(2)
+  .delaysync(4/16)
+  .room(2).gain(0.075)
+  .beat("0 2 3?",4)
+  .color('white')
+
+//bass
+let bassA = note(`
+  d2@3 d2@3 d2@1 a2@1 d2@2 ~@2 a2@2 d2@2 
+  e2@3 e2@3 e2@1 b2@1 e2@2 ~2@1 e2@1 b2@2 e2@2  
+  d2@3 d2@3 d2@1 a2@1 ~@1 d2@3 d2@2 d2@2  
+  a2@3 a2@3 g2@3 g2@3 f2@2 e2@2`)
+  .slow(4)
+  .gain("0.3")
+  .color('#68EDC6')
+
+let leadA =  note(`
+  e4@2 f4@2 ~@2 d4@2 e4@2 ~@2 a3@2 d4@2 
+  e4@2 f4@2 ~@2 d4@2 e4@2 ~@2 a3@2 d4@2 
+  a4@2 e4@2 a4@6 e4@2 b3@2 e4@2
+  e4@2 f4@2 ~@2 d4@2 e4@2 ~@2 c4@1 d4@1 e4@1 g4@1
+  e4@2 f4@2 ~@2 d4@2 e4@2 ~@2 a3@2 d4@2 
+  e4@2 f4@2 ~@2 d4@2 e4@2 ~@2 a3@2 d4@2 
+  a4@2 e4@2 a4@6 d4@2 bb3@2 g4@4
+  f4@2 e4@2 d4@2 c#4@2 ~@2 c4@1 d4@1 e4@1 g4@1`)
+  .slow(4)
+  .sound("gm_vibraphone")
+  .room(1)
+  .gain("0.1")
+  .color("#90F3FF")
+
+let padsA =  note(`
+  ~@2 ~@2 g4@4 ~@2 f4@2 ~@2 ~@2
+  ~@2 ~@2 g4@4 ~@2 f4@2 ~@2 ~@2
+  b3@8 d4@8
+  e4@8 f4@8
+  ~@2 ~@2 g4@4 ~@2 f4@2 ~@2 g4@4
+  ~@2 f4@2 ~@2 ~@2 ~@2 ~@2 ~@2
+  c#4@4 d4@8 e4@4
+  e4@4 f4@8 g4@4`)
+  .slow(4)
+  .sound("gm_blown_bottle")
+  .room(1)
+  .gain("0.2")
+  .color("#90BEDE")
+
+let padsB =  note(`
+  ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2
+  ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2
+  ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2
+  ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2 ~@2
+  ~@2 ~@2 c5@4 ~@2 a4@2 ~@2 c5@4
+  ~@2 a4@2 ~@2 ~@2 ~@2 ~@2 ~@2
+  e4@4 f4@8 g4@4
+  g4@4 a4@8 bb4@4`)
+  .slow(4)
+  .sound("gm_blown_bottle")
+  .room(1)
+  .gain("0.2")
+  .color("#90BEDE")
+
+
+$: stack(
+  bassA.mask(     "<1 1 1 1 1 1 1 1 1 1 1>/4"),
+  chordsA.mask(   "<0 1 1 1 1 1 1 1 1 1 0>/4"),
+  leadA.mask(     "<0 0 0 0 1 1 1 1 1 0 0>/4"),
+  padsA.mask(     "<0 0 1 1 0 0 1 1 0 0 0>/4"),
+  padsB.mask(     "<0 0 1 1 0 0 1 1 0 0 0>/4"),
+  bdDrum.mask(    "<1 1 1 1 1 1 1 1 1 1 1>/4"),
+  sdDrum.mask(    "<1 1 1 1 1 1 1 1 1 1 1>/4"),
+  hhDrum.mask(    "<1 1 1 1 1 1 1 1 1 1 1>/4"),
+  shDrum.mask(    "<1 1 1 1 1 1 1 1 1 1 1>/4"),
+)
+
+ all(x=>x
+    .pianoroll({
+      playhead: 0.3, 
+      playheadColor: 'white', 
+      autorange:1,
+      fill: 0,
+      fillActive: 1,
+      stroke: 2,
+      vertical: 1, 
+      flipTime: 1,
+      cycles: 4,
+      background: 'black',
+    })
+ )
